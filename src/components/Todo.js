@@ -1,9 +1,39 @@
 import React from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
 
 function Todo(props) {
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
+
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
+  
+  const wasEditing = usePrevious(isEditing);
+  console.log(wasEditing);
+
+
+  // int * p = &a;
+  const editFieldRef = useRef(null);
+  const editButtonRef = useRef(null);
+
+  //document.getElementById()
+
+  useEffect(() => {
+    if (!wasEditing && isEditing) {
+      editFieldRef.current.focus();
+    } else if (wasEditing && !isEditing) {
+      editButtonRef.current.focus();
+    }
+  }, [wasEditing, isEditing]);
+  
+  
+
 
   function handleChange(e) {
     setNewName(e.target.value);
@@ -27,6 +57,7 @@ function Todo(props) {
           className="todo-text"
           type="text"
           value={newName}
+          ref={editFieldRef}
           onChange={handleChange}
         />
       </div>
@@ -63,6 +94,7 @@ function Todo(props) {
         <button
           type="button"
           className="btn"
+          ref={editButtonRef}
           onClick={() => {
             setEditing(true);
           }}>
