@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/moz-todo-react/static/css/main.94620469.css",
+    "main.js": "/moz-todo-react/static/js/main.dea40169.js",
+    "index.html": "/moz-todo-react/index.html",
+    "main.94620469.css.map": "/moz-todo-react/static/css/main.94620469.css.map",
+    "main.dea40169.js.map": "/moz-todo-react/static/js/main.dea40169.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.94620469.css",
+    "static/js/main.dea40169.js"
+  ]
+}
