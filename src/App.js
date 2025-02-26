@@ -1,16 +1,25 @@
 import FilterButton from "./components/FilterButton";
 import Form from "./components/Form";
 import Todo from "./components/Todo";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { nanoid } from "nanoid";
 
 export default function App(props) {
 
   const headRef = useRef(null);
 
-  const [tasks, setTasks] = useState(props.tasks);
+  const [tasks, setTasks] = useState([]);
 
   const [filter, setFilter] = useState("All");
+
+  useEffect(() => {
+    fetch("http://localhost:8080/todo/all").then((res) => {
+      return res.json();
+    }).then((todos) => {
+      console.log(todos);
+      setTasks(todos);
+    })
+  }, [])
 
   const FILTER_MAP = {
     All: () => true,
