@@ -2,23 +2,18 @@ import FilterButton from "./components/FilterButton";
 import Form from "./components/Form";
 import Todo from "./components/Todo";
 import { useEffect, useRef, useState } from "react";
-import { nanoid } from "nanoid";
+import { useTaskStore } from "./store/todo";
 
-export default function App(props) {
+export default function App() {
+
+  const { allTasks, fetchAllTasks, addTask, deleteTask, editTask, toggleTaskCompleted } = useTaskStore();
 
   const headRef = useRef(null);
-
-  const [tasks, setTasks] = useState([]);
 
   const [filter, setFilter] = useState("All");
 
   useEffect(() => {
-    fetch("http://localhost:8080/todo/all").then((res) => {
-      return res.json();
-    }).then((todos) => {
-      console.log(todos);
-      setTasks(todos);
-    })
+    fetchAllTasks();
   }, [])
 
   const FILTER_MAP = {
@@ -38,52 +33,7 @@ export default function App(props) {
     />
   ));
 
-
-
-
-  function addTask(name) {
-    const newTask = { id: `todo-${nanoid()}`, name, completed: false };
-    setTasks([...tasks, newTask]);
-    console.log(tasks);
-  }
-
-  function deleteTask(id) {
-    const remainingTasks = tasks.filter((task) => id !== task.id);
-
-    setTasks(remainingTasks);
-  }
-
-  function editTask(id, newName) {
-    console.log("newName is " + newName);
-    const editedTaskList = tasks.map((task) => {
-      // if this task has the same ID as the edited task
-      if (id === task.id) {
-        // Copy the task and update its name
-        return { ...task, name: newName };
-      }
-      // Return the original task if it's not the edited task
-      return task;
-    });
-    setTasks(editedTaskList);
-  }
-
-
-  function toggleTaskCompleted(id) {
-    const updatedTasks = tasks.map((task) => {
-      // if this task has the same ID as the edited task
-      if (id === task.id) {
-        // use object spread to make a new object
-        // whose `completed` prop has been inverted
-        return { ...task, completed: !task.completed };
-      }
-      return task;
-    });
-    setTasks(updatedTasks);
-    console.log(updatedTasks);
-  }
-
-
-  const taskList = tasks
+  const taskList = allTasks
     .filter(FILTER_MAP[filter])
     .map((task) => (
       <Todo
